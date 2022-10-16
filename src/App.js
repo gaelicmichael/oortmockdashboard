@@ -1,25 +1,38 @@
-import logo from './logo.svg';
-import './App.css';
+import { Routes, Route } from "react-router-dom";
+import { Grommet } from "grommet";
 
-function App() {
+import { LoginPage } from "./pages/LoginPage";
+import { HomePage } from "./pages/Home";
+import { OortDashboardPage } from "./pages/OortDashboard";
+import { ProtectedLayout } from "./components/ProtectedLayout";
+import { NonsecuredLayout } from "./components/NonsecuredLayout";
+import { ErrorPage } from "./pages/ErrorPage";
+
+export default function App() {
+  const theme = {
+    global: {
+      font: {
+        family: 'Roboto',
+        size: '18px',
+        height: '20px',
+      },
+    },
+  };
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
-}
+    <Grommet theme={theme} full>
+      <Routes>
+        <Route element={<NonsecuredLayout />}>
+          <Route path="/" element={<HomePage />} />
+          <Route path="/login" element={<LoginPage />} />
+        </Route>
 
-export default App;
+        <Route path="/secure" element={<ProtectedLayout />}>
+          <Route path="oort" element={<OortDashboardPage />} />
+        </Route>
+
+        <Route path="*" element={<ErrorPage />} />
+      </Routes>
+    </Grommet>
+  )
+}
